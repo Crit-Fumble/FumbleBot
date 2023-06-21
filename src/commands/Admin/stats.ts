@@ -10,6 +10,7 @@ import { injectable } from "tsyringe"
 import { Discord, Slash, SlashOption } from "@decorators"
 import { Stats } from "@services"
 import { getColor } from "@utils/functions"
+import { Guard, UserPermissions } from "@guards"
 
 const statsResolver: StatsResolverType = [
 	{
@@ -44,7 +45,7 @@ const statsResolver: StatsResolverType = [
 
 @Discord()
 @injectable()
-@Category('General')
+@Category('Admin')
 export default class StatsCommand {
 
 	constructor(
@@ -54,6 +55,9 @@ export default class StatsCommand {
 	@Slash({
 		name: 'stats'
 	})
+	@Guard(
+		UserPermissions(['Administrator'])
+	)
 	async statsHandler(
 		@SlashOption({ name: 'days', type: ApplicationCommandOptionType.Number, required: true }) days: number,
 		interaction: CommandInteraction,

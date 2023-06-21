@@ -8,7 +8,7 @@ dayjs.extend(relativeTime)
 
 import { generalConfig } from "@configs"
 import { Discord, Slash } from "@decorators"
-import { Guard } from "@guards"
+import { Guard, UserPermissions } from "@guards"
 import { Stats } from "@services"
 import { getColor, getTscordVersion, isValidUrl, timeAgo } from "@utils/functions"
 
@@ -22,7 +22,7 @@ const links = [
 
 @Discord()
 @injectable()
-@Category('General')
+@Category('Admin')
 export default class InfoCommand {
 
 	constructor(
@@ -32,7 +32,9 @@ export default class InfoCommand {
 	@Slash({
 		name: 'info',
 	})
-	@Guard()
+	@Guard(
+		UserPermissions(['Administrator'])
+	)
 	async info(
 		interaction: CommandInteraction,
 		client: Client,

@@ -4,17 +4,19 @@ import { Client } from "discordx"
 
 import { generalConfig } from "@configs"
 import { Discord, Slash } from "@decorators"
-import { Guard } from "@guards"
+import { Guard, UserPermissions } from "@guards"
 import { getColor } from "@utils/functions"
 
 @Discord()
-@Category('General')
+@Category('Admin')
 export default class InviteCommand {
 
 	@Slash({ 
 		name: 'invite'
     })
-	@Guard()
+	@Guard(
+		UserPermissions(['Administrator'])
+	)
 	async invite(
 		interaction: CommandInteraction, 
 		client: Client,

@@ -3,14 +3,18 @@ import type { CommandInteraction, Message } from "discord.js"
 import { Client } from "discordx"
 
 import { Discord, Slash } from "@decorators"
+import { Guard, UserPermissions } from "@guards"
 
 @Discord()
-@Category('General')
+@Category('Admin')
 export default class PingCommand {
 
 	@Slash({ 
 		name: 'ping'
 	})
+	@Guard(
+		UserPermissions(['Administrator'])
+	)
 	async ping(
 		interaction: CommandInteraction,
 		client: Client,
