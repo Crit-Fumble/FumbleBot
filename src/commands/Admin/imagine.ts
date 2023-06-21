@@ -53,9 +53,9 @@ export default class ImagineCommand {
 			content: response?.url,
 			embeds: [{
 				"title": `> ${prompt}`,
-				// "image": {
-				// 	"url": `${response?.url}`,
-				// },
+				"image": {
+					"url": `${response?.url}`,
+				},
 			}],
 		})
 	}

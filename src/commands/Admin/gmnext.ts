@@ -1,14 +1,14 @@
 import { Category } from "@discordx/utilities"
-import { ApplicationCommandOptionType, CommandInteraction, Message } from "discord.js"
+import { ApplicationCommandOptionType, CommandInteraction, Message, MessageFlags } from "discord.js"
 import { Discord, Guard, Slash, SlashOption } from "@decorators"
 import { ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from "openai"
 import { UserPermissions } from "@guards";
 
 @Discord()
 @Category('Admin')
-export default class WriteNextCommand {
+export default class GmNextCommand {
 	@Slash({ 
-		name: 'writenext'
+		name: 'gmnext'
 	})
 	@Guard(
 		UserPermissions(['Administrator'])
@@ -50,11 +50,14 @@ export default class WriteNextCommand {
 		});
 		const response = rawResponse?.data?.choices?.[0]?.message?.content;
 
+		// TODO: generate an image as well
+
 		interaction.followUp({
 			content: response,
 			embeds: [{
 				"title": `> ${prompt}`,
 			}],
+			flags: MessageFlags.Ephemeral,
 		})
 	}
 }

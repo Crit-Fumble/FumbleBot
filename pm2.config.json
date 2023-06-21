@@ -1,7 +1,7 @@
 {
     "apps": [
         {
-            "name": "My Discord Bot",
+            "name": "FumbleBot",
             "script": "npm",
             "args" : "run build:start"
         }
