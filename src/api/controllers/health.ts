@@ -22,6 +22,11 @@ export class HealthController extends BaseController {
             this.stats = stats
         })
     }
+    
+    @Get()
+    async health() {
+        return 'OK'
+    }
 
     @Get('/check')
     async healthcheck() {

@@ -1,14 +1,18 @@
 import { Category } from "@discordx/utilities"
 import { ApplicationCommandOptionType, CommandInteraction, Message } from "discord.js"
-import { Discord, Slash, SlashOption } from "@decorators"
+import { Discord, Guard, Slash, SlashOption } from "@decorators"
 import { ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from "openai"
+import { UserPermissions } from "@guards";
 
 @Discord()
-@Category('General')
-export default class WriteCommand {
+@Category('Admin')
+export default class WriteNextCommand {
 	@Slash({ 
-		name: 'gmnext'
-    })
+		name: 'writenext'
+	})
+	@Guard(
+		UserPermissions(['Administrator'])
+	)
 	async write(
 		@SlashOption({ name: 'prompt', type: ApplicationCommandOptionType.String, required: true }) prompt: string,
 		interaction: CommandInteraction, 
@@ -39,10 +43,10 @@ export default class WriteCommand {
 		}).reverse();
 
 		const rawResponse: any = await openAi.createChatCompletion({
-			// prompt, // TODO: get working off simple text prompt and use openAi.createCompletion
 			messages,
 			model: 'gpt-3.5-turbo',
 			user: interaction?.user?.id,
+			stop: '\n'
 		});
 		const response = rawResponse?.data?.choices?.[0]?.message?.content;
 
