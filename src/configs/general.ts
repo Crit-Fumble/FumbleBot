@@ -4,7 +4,7 @@ export const generalConfig: GeneralConfigType = {
 	description: '', // the description of your bot
 	defaultLocale: 'en', // default language of the bot, must be a valid locale
 	ownerId: process.env['BOT_OWNER_ID'] || '',
-	timezone: 'Chicago/Americas', // default TimeZone to well format and localize dates (logs, stats, etc)
+	timezone: 'America/Chicago', // default TimeZone to well format and localize dates (logs, stats, etc)
 
 	simpleCommandsPrefix: '!FB ', // default prefix for simple command messages (old way to do commands on discord)
 	automaticDeferring: true, // enable or not the automatic deferring of the replies of the bot on the command interactions
