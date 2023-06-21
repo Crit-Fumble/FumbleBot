@@ -50,11 +50,12 @@ export default class ImagineCommand {
 		}
 
 		interaction.followUp({
+			content: response?.url,
 			embeds: [{
 				"title": `> ${prompt}`,
-				"image": {
-					"url": `${response?.url}`,
-				},
+				// "image": {
+				// 	"url": `${response?.url}`,
+				// },
 			}],
 		})
 	}
