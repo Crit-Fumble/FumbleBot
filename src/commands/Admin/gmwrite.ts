@@ -1,15 +1,19 @@
 import { Category } from "@discordx/utilities"
 import { ApplicationCommandOptionType, CommandInteraction } from "discord.js"
-import { Discord, Slash, SlashOption } from "@decorators"
+import { Discord, Guard, Slash, SlashOption } from "@decorators"
 import { ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from "openai"
+import { UserPermissions } from "@guards";
 
 @Discord()
-@Category('General')
+@Category('Admin')
 export default class GmWriteCommand {
 	@Slash({ 
 		name: 'gmwrite',
 		description: 'writes some text in response to a prompt'
-    })
+	})
+	@Guard(
+		UserPermissions(['Administrator'])
+	)
 	async write(
 		@SlashOption({ name: 'prompt', type: ApplicationCommandOptionType.String, required: true }) prompt: string,
 		interaction: CommandInteraction, 
