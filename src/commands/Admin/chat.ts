@@ -47,8 +47,8 @@ export default class ChatCommand {
 		});
 		const response = rawResponse?.data?.choices?.[0]?.message?.content;
 
-		await interaction.editReply('');
-		
+		await interaction.deleteReply();
+
 		interaction.channel?.send({
 			content: response,
 		})

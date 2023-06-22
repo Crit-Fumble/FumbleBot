@@ -15,7 +15,6 @@ export default class SuggestReplyCommand {
 		UserPermissions(['Administrator'])
 	)
 	async write(
-		@SlashOption({ name: 'prompt', type: ApplicationCommandOptionType.String, required: false }) prompt: string,
 		interaction: CommandInteraction, 
 	) {
 		await interaction.deferReply({ephemeral: true});
@@ -28,7 +27,6 @@ export default class SuggestReplyCommand {
 		// const guildMembers = await interaction.guild?.members.fetch();
 		const rawMessages: any = await interaction.channel?.messages.fetch();
 		const messages = rawMessages?.map((mes: Message) => {
-			// assumes the user is the GM of the scene
 			if (mes?.author?.id == interaction.user.id) { // mes?.author?.id === process.env.BOT_APP_ID || 
 				return {
 					"role": ChatCompletionRequestMessageRoleEnum.Assistant,
@@ -51,9 +49,8 @@ export default class SuggestReplyCommand {
 		const response = rawResponse?.data?.choices?.[0]?.message?.content;
 
 		interaction.followUp({
-			// content: `### Suggestion${prompt ? ` > ${prompt}` : ''}\n${response}`,
 			embeds: [{
-				"title": `Suggestion > ${prompt ?? ''}`,
+				"title": `Suggested Reply`,
 				"description": `\`\`\`\n${response}\n\`\`\``,
 			}],
 		})
