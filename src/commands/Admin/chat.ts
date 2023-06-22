@@ -14,7 +14,8 @@ export default class ChatCommand {
 	@Guard(
 		UserPermissions(['Administrator'])
 	)
-	async write(
+	async chat(
+		@SlashOption({ name: 'prompt', type: ApplicationCommandOptionType.String, required: false }) prompt: string,
 		interaction: CommandInteraction, 
 	) {
 		await interaction.deferReply({ephemeral: true});
@@ -40,6 +41,11 @@ export default class ChatCommand {
 			}
 		}).reverse();
 
+		messages.unshift({
+			"role": ChatCompletionRequestMessageRoleEnum.User,
+			"content": `Assume the role of FumbleBot, a chat bot on the TTRPG Community Crit Fumble Gaming's (CFG) Discord Server. ${prompt ?? 'Contribute to, comment on, or otherwise continue the above conversation.'}`,
+		})
+
 		const rawResponse: any = await openAi.createChatCompletion({
 			messages,
 			model: 'gpt-3.5-turbo',
@@ -47,10 +53,16 @@ export default class ChatCommand {
 		});
 		const response = rawResponse?.data?.choices?.[0]?.message?.content;
 
-		await interaction.deleteReply();
+		await interaction.editReply(`Chat Response Executed${prompt ? ` /w prompt\n>>>${prompt}` : '.'}`);
 
 		interaction.channel?.send({
 			content: response,
+			embeds: [{
+				"fields": prompt ? [{
+					"name": `Prompt`,
+					"value": `> ${prompt}`
+				}] : undefined,
+			}]
 		})
 	}
 }
