@@ -6,58 +6,56 @@ import { UserPermissions } from "@guards";
 
 @Discord()
 @Category('Admin')
-export default class GmNextCommand {
+export default class SuggestReplyCommand {
 	@Slash({ 
-		name: 'gmnext'
+		name: 'suggestreply',
+		description: 'drafts your next message for you',
 	})
 	@Guard(
 		UserPermissions(['Administrator'])
 	)
 	async write(
-		@SlashOption({ name: 'prompt', type: ApplicationCommandOptionType.String, required: true }) prompt: string,
+		@SlashOption({ name: 'prompt', type: ApplicationCommandOptionType.String, required: false }) prompt: string,
 		interaction: CommandInteraction, 
 	) {
+		await interaction.deferReply({ephemeral: true});
 
 		const openAi = new OpenAIApi(new Configuration({
 			organization: process.env.OPENAI_ORG_ID,
 			apiKey: process.env.OPENAI_API_KEY,
 		}));
 
+		// const guildMembers = await interaction.guild?.members.fetch();
 		const rawMessages: any = await interaction.channel?.messages.fetch();
 		const messages = rawMessages?.map((mes: Message) => {
-			if (mes?.author?.id === process.env.BOT_APP_ID || mes?.author?.id == interaction.user.id) {
+			// assumes the user is the GM of the scene
+			if (mes?.author?.id == interaction.user.id) { // mes?.author?.id === process.env.BOT_APP_ID || 
 				return {
 					"role": ChatCompletionRequestMessageRoleEnum.Assistant,
-					// "content": `${gameSystem?.STORYTELLER_LABEL}: ${mes.content}`,
 					"content": `${mes?.content}`,
 				};
 			} else {
-				// TODO: use player character name?
 				return {
+					// "name": guildMembers?.get(mes?.author?.id)?.displayName ?? mes?.author?.username,
 					"role": ChatCompletionRequestMessageRoleEnum.User,
 					"content": `${mes?.content}`,
-					// "content": `<@!${mes?.author?.id}>: ${mes.content}`,
 				};
 			}
-			// ignore all other messages
 		}).reverse();
 
 		const rawResponse: any = await openAi.createChatCompletion({
 			messages,
 			model: 'gpt-3.5-turbo',
 			user: interaction?.user?.id,
-			stop: '\n'
 		});
 		const response = rawResponse?.data?.choices?.[0]?.message?.content;
 
-		// TODO: generate an image as well
-
 		interaction.followUp({
-			content: response,
+			// content: `### Suggestion${prompt ? ` > ${prompt}` : ''}\n${response}`,
 			embeds: [{
-				"title": `> ${prompt}`,
+				"title": `Suggestion > ${prompt ?? ''}`,
+				"description": `\`\`\`\n${response}\n\`\`\``,
 			}],
-			flags: MessageFlags.Ephemeral,
 		})
 	}
 }

@@ -15,7 +15,8 @@ export default class ImagineCommand {
 	}
 
 	@Slash({ 
-		name: 'imagine'
+		name: 'imagine',
+		description: 'imagines an image in response to a prompt',
 	})
 	@Guard(
 		UserPermissions(['Administrator'])
@@ -24,11 +25,7 @@ export default class ImagineCommand {
 		@SlashOption({ name: 'prompt', type: ApplicationCommandOptionType.String, required: true }) prompt: string,
 		interaction: CommandInteraction, 
 	) {
-
-		if (!prompt) {
-			return;
-		}
-
+		await interaction.deferReply();
 		// NOTE: low-res (256x256) only on free tier
 		// TODO: 512x512 and 1024x1024 for premium roles
 		const openAi = new OpenAIApi(new Configuration({
