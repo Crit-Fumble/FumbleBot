@@ -36,9 +36,11 @@ export default class CloneEventCommand {
 
 		const guild = interaction.guild;
 		const scheduledEvents = guild?.scheduledEvents;
-		scheduledEvents?.cache
-		const eventCache = scheduledEvents?.cache;
-		const event = eventCache?.get(eventId);
+		const scheduledEventList = await scheduledEvents.fetch();
+		// scheduledEvents?.cache
+		// const eventCache = scheduledEvents?.cache;
+		// const event = eventCache?.get(eventId);
+		const event = scheduledEventList?.find(ev => ev.id === eventId)
 
 		if (!event?.name 
 			|| !event?.scheduledStartTimestamp
