@@ -73,27 +73,23 @@ export default class ReadyEvent {
     async minuteUpdate() {
         console.info('One Minute Update');
         const client = await resolveDependency(Client)
-        
         const guilds = client.guilds.cache;
+
+        // for each guild
         await Promise.all(guilds.map(guild => {
+            // start scheduled events
             const scheduledEvents = guild?.scheduledEvents;
             const eventCache = scheduledEvents.cache;
-            const filteredEvents = eventCache
-                .filter((ev: any) => {
-                    if ( ev.creatorId !== process.env.BOT_APP_ID
-                    || ev.status !== GuildScheduledEventStatus.Scheduled
-                    || !ev?.scheduledStartTimestamp 
-                    || !isToday(new Date(ev?.scheduledStartTimestamp))
-                    || ev?.scheduledStartTimestamp > (Date.now() + (1 * 60 * 1000))
-                    ) {
-                        return false;
-                    }
-                    // start event
-                    return true;
-                });
-            
-            // start each event
-            filteredEvents.each(ev => {
+            const ONE_MINUTE = (1 * 60 * 1000);
+            eventCache?.each(ev => {
+                if ( ev.creatorId !== process.env.BOT_APP_ID
+                || ev.status !== GuildScheduledEventStatus.Scheduled
+                || !ev?.scheduledStartTimestamp 
+                || !isToday(new Date(ev?.scheduledStartTimestamp))
+                || ev?.scheduledStartTimestamp > (Date.now() + ONE_MINUTE)
+                ) {
+                    return;
+                }
                 ev?.setStatus(GuildScheduledEventStatus.Active);
             });
         }))

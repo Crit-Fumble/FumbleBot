@@ -12,13 +12,14 @@ export default class CloneEventCommand {
 
 	@Slash({ 
 		name: 'cloneevent',
-		description: 'url: event link | NOTE: FumbleBot will start cloned events automatically.'
+		description: 'url: event link | weeks: weeks to add | NOTE: FumbleBot will start cloned events automatically.'
 	})
 	@Guard(
 		UserPermissions(['Administrator'])
 	)
 	async ping(
 		@SlashOption({ name: 'url', type: ApplicationCommandOptionType.String, required: true }) url: string,
+		@SlashOption({ name: 'weeks', type: ApplicationCommandOptionType.Number, required: false }) weeks: number,
     // @SlashChoice({ name: "Weekly", value: "weekly" }, { name: "Bi-Weekly", value: "weekly" }, { name: "Monthly", value: "monthly" }, )
 		// @SlashOption({ name: 'interval', type: ApplicationCommandOptionType.String, required: false }) interval: string,
 		// @SlashOption({ name: 'quantity', type: ApplicationCommandOptionType.Number, required: false }) quantity: number,
@@ -59,6 +60,13 @@ export default class CloneEventCommand {
 			image: event?.image ?? undefined
 		};
 
+		if (weeks) {
+			newEvent = {
+				...newEvent,
+				scheduledStartTime: newEvent?.scheduledStartTime + (weeks * 7 * 24 * 60 * 60 * 1000),
+			}
+		}
+
 		do {
 			// add one week until we get to a valid date
 			newEvent = {
@@ -68,8 +76,6 @@ export default class CloneEventCommand {
 		} while (newEvent?.scheduledStartTime <= Date.now())
 
 		const createdEvent = await scheduledEvents?.create(newEvent);
-
-		console.log(createdEvent);
 
 		interaction.editReply({ content: `Event Cloned -> [${name}](${createdEvent})`})
 	}
