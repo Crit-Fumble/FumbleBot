@@ -75,13 +75,15 @@ export default class CloneEventCommand {
 		// 	}
 		// }
 
-		while (newEvent?.scheduledStartTime <= Date.now()) {
-			// add one week until we get to a valid date
-			newEvent = {
-				...newEvent,
-				scheduledStartTime: newEvent?.scheduledStartTime + (7 * 24 * 60 * 60 * 1000),
-			}
-		}
+		// if () {
+		// 	do {
+		// 		// add one week until we get to a valid date
+		// 		newEvent = {
+		// 			...newEvent,
+		// 			scheduledStartTime: newEvent?.scheduledStartTime + (7 * 24 * 60 * 60 * 1000),
+		// 		}
+		// 	} while (newEvent?.scheduledStartTime <= Date.now())
+		// }
 
 		// TODO: create number, iterating the time interval each time
 		interaction.editReply({ content: `New Event Data\n\`\`\`${JSON.stringify(newEvent, null, 2)}\`\`\``});
