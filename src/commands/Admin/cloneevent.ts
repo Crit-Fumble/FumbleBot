@@ -1,29 +1,77 @@
 import { Category } from "@discordx/utilities"
-import type { CommandInteraction, Message } from "discord.js"
+import { ApplicationCommandOptionType, CommandInteraction, Message } from "discord.js"
 import { Client } from "discordx"
 
-import { Discord, Slash } from "@decorators"
+import { Discord, Slash, SlashChoice, SlashOption } from "@decorators"
 import { Guard, UserPermissions } from "@guards"
+
 
 @Discord()
 @Category('Admin')
 export default class CloneEventCommand {
 
 	@Slash({ 
-		name: 'cloneevent'
+		name: 'cloneevent',
+		description: 'url: event link | NOTE: FumbleBot will start cloned events automatically.'
 	})
 	@Guard(
 		UserPermissions(['Administrator'])
 	)
 	async ping(
+		@SlashOption({ name: 'url', type: ApplicationCommandOptionType.String, required: true }) url: string,
+    // @SlashChoice({ name: "Weekly", value: "weekly" }, { name: "Bi-Weekly", value: "weekly" }, { name: "Monthly", value: "monthly" }, )
+		// @SlashOption({ name: 'interval', type: ApplicationCommandOptionType.String, required: false }) interval: string,
+		// @SlashOption({ name: 'quantity', type: ApplicationCommandOptionType.Number, required: false }) quantity: number,
 		interaction: CommandInteraction,
 		client: Client,
 		{ localize }: InteractionData
 	) {
-		const guild = interaction.guild;
-		const events = guild?.scheduledEvents.fetch();
+		await interaction.deferReply({ephemeral: true});
+		const eventId = url.split('/').pop();
+		if (!eventId) {
+			interaction.editReply({ content: `Could not find event`});
+			return;
+		}
 
-		interaction.followUp({ content: `Event Cloned -> [New Event](${''})`})
+		const scheduledEvents = interaction.guild?.scheduledEvents;
+		const event = scheduledEvents?.cache?.get(eventId);
+		if (!event?.name 
+			|| !event?.scheduledStartTimestamp
+		) {
+			return;
+		}
+		
+		const name = `${event?.name}`;
+		let newEvent = {
+			name,
+			scheduledStartTime: event?.scheduledStartTimestamp ?? undefined,
+			scheduledEndTime: event?.scheduledEndTimestamp ?? undefined,
+			privacyLevel: event?.privacyLevel ?? undefined,
+			entityType: event?.entityType ?? undefined,
+			description: event?.description ?? undefined,
+			channel: event?.channel ?? undefined,
+			entityMetadata: event?.entityMetadata?.location ? {
+				location: event?.entityMetadata?.location,
+				fumbleBot: {
+					test: 'TEST',
+				},
+			} : undefined,
+			image: event?.image ?? undefined
+		};
+
+		do {
+			// add one week until we get to a valid date
+			newEvent = {
+				...newEvent,
+				scheduledStartTime: newEvent?.scheduledStartTime + (7 * 24 * 60 * 60 * 1000),
+			}
+		} while (newEvent?.scheduledStartTime <= Date.now())
+
+		const createdEvent = await scheduledEvents?.create(newEvent);
+
+		console.log(createdEvent);
+
+		interaction.editReply({ content: `Event Cloned -> [${name}](${createdEvent})`})
 	}
 
 }

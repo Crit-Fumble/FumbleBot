@@ -1,4 +1,4 @@
-import { ActivityType } from "discord.js"
+import { ActivityType, GuildScheduledEventStatus } from "discord.js"
 import { Client } from "discordx"
 import { injectable } from "tsyringe"
 
@@ -6,7 +6,8 @@ import { generalConfig, logsConfig } from "@configs"
 import { Discord, Once, Schedule } from "@decorators"
 import { Data } from "@entities"
 import { Database, Logger, Scheduler, Store } from "@services"
-import { resolveDependency, syncAllGuilds } from "@utils/functions"
+import { resolveDependency, syncAllGuilds, isToday } from "@utils/functions"
+
 
 @Discord()
 @injectable()
@@ -23,7 +24,6 @@ export default class ReadyEvent {
 
     @Once('ready')
     async readyHandler([client]: [Client]) {
-
         // make sure all guilds are cached
         await client.guilds.fetch()
 
@@ -37,7 +37,7 @@ export default class ReadyEvent {
         })
 
         // change activity
-        await this.changeActivity()
+        await this.changeActivity();
 
         // update last startup time in the database
         await this.db.get(Data).set('lastStartup', Date.now())
@@ -57,30 +57,55 @@ export default class ReadyEvent {
 
     @Schedule('*/15 * * * * *') // each 15 seconds
     async changeActivity() {
-
+        // set bot activity
         const ActivityTypeEnumString = ["PLAYING", "STREAMING", "LISTENING", "WATCHING", "CUSTOM", "COMPETING"] // DO NOT CHANGE THE ORDER
-
         const client = await resolveDependency(Client)
         const activity = generalConfig.activities[this.activityIndex]
-        
         activity.text = eval(`new String(\`${activity.text}\`).toString()`)
-            
-        if (activity.type === 'STREAMING') { //streaming activity
-            
-            client.user?.setStatus('online')
-            client.user?.setActivity(activity.text, {
-                'url': 'https://www.twitch.tv/discord',
-                'type': ActivityType.Streaming
-            })
-
-        } else { //other activities
-            
-            client.user?.setActivity(activity.text, {
-                type: ActivityTypeEnumString.indexOf(activity.type)
-            })
-        }
-
+        client.user?.setActivity(activity.text, {
+            type: ActivityTypeEnumString.indexOf(activity.type)
+        })
         this.activityIndex++
         if (this.activityIndex === generalConfig.activities.length) this.activityIndex = 0
+    }
+
+    @Schedule('0 */1 * * * *') // each 1 minute
+    async minuteUpdate() {
+        console.info('One Minute Update');
+        const client = await resolveDependency(Client)
+        
+        const guilds = client.guilds.cache;
+        await Promise.all(guilds.map(guild => {
+            const scheduledEvents = guild?.scheduledEvents;
+            const eventCache = scheduledEvents.cache;
+            const filteredEvents = eventCache
+                .filter((ev: any) => {
+                    if ( ev.creatorId !== process.env.BOT_APP_ID
+                    || ev.status !== GuildScheduledEventStatus.Scheduled
+                    || !ev?.scheduledStartTimestamp 
+                    || !isToday(new Date(ev?.scheduledStartTimestamp))
+                    || ev?.scheduledStartTimestamp > (Date.now() + (1 * 60 * 1000))
+                    ) {
+                        return false;
+                    }
+                    // start event
+                    return true;
+                });
+            
+            // start each event
+            filteredEvents.each(ev => {
+                ev?.setStatus(GuildScheduledEventStatus.Active);
+            });
+        }))
+    }
+
+    @Schedule('0 */10 * * * *') // each 10 minutes
+    async tenMinuteUpdate() {
+        console.info('Ten Minute Update');
+    }
+
+    @Schedule('0 0 */1 * * *') // each 1 hour
+    async hourUpdate() {
+        console.info('One Hour Update');
     }
 }
