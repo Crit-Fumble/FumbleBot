@@ -27,6 +27,7 @@ export default class CloneEventCommand {
 		{ localize }: InteractionData
 	) {
 		await interaction.deferReply({ephemeral: true});
+
 		const eventId = url.split('/').pop();
 		if (!eventId) {
 			interaction.editReply({ content: `Could not find event`});
@@ -35,10 +36,14 @@ export default class CloneEventCommand {
 
 		const guild = interaction.guild;
 		const scheduledEvents = guild?.scheduledEvents;
-		const event = scheduledEvents?.cache?.get(eventId);
+		scheduledEvents?.cache
+		const eventCache = scheduledEvents?.cache;
+		const event = eventCache?.get(eventId);
+
 		if (!event?.name 
 			|| !event?.scheduledStartTimestamp
 		) {
+		interaction.editReply({ content: `Found Incomplete Event\n\`\`\`${JSON.stringify(event, null, 2)}\`\`\``});
 			return;
 		}
 
