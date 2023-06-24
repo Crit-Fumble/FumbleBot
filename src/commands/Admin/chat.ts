@@ -3,6 +3,7 @@ import { ApplicationCommandOptionType, CommandInteraction, Message, MessageFlags
 import { Discord, Guard, Slash, SlashOption } from "@decorators"
 import { ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from "openai"
 import { UserPermissions } from "@guards";
+// import * as GptCoder from 'gpt-3-encoder';
 
 @Discord()
 @Category('Admin')
@@ -26,6 +27,18 @@ export default class ChatCommand {
 
 		// const guildMembers = await interaction.guild?.members.fetch();
 		const rawMessages: any = await interaction.channel?.messages.fetch({limit: 64});
+		
+		// old school; shorten those messages until they are small enough
+		let totalLength = 0;
+		do {
+			for (let i = 0; i < rawMessages.length; i++) {
+				totalLength += rawMessages[i]?.content?.length ?? 0;
+			}
+			if (totalLength > 16000) {
+				rawMessages.shift;
+			}
+		} while (totalLength > 16000);
+
 		const messages = rawMessages?.filter((mes: Message) => mes?.content)?.map((mes: Message) => {
 			if (mes?.author?.id === process.env.BOT_APP_ID) {
 				return {

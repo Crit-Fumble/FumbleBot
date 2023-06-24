@@ -2,7 +2,7 @@ import { Category } from "@discordx/utilities"
 import { ApplicationCommandOptionType, CommandInteraction, Message, MessageFlags } from "discord.js"
 import { Discord, Guard, Slash, SlashOption } from "@decorators"
 import { ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from "openai"
-import { UserPermissions } from "@guards";
+// import * as GptCoder from 'gpt-3-encoder';
 
 @Discord()
 @Category('Premium')
@@ -23,7 +23,19 @@ export default class WriteReplyCommand {
 		}));
 
 		const guildMembers = await interaction.guild?.members.fetch();
-		const rawMessages: any = await interaction.channel?.messages.fetch({limit: 64});
+		const rawMessages: any = await interaction.channel?.messages.fetch({limit: 32});
+
+		// old school; shorten those messages until they are small enough
+		let totalLength = 0;
+		do {
+			for (let i = 0; i < rawMessages.length; i++) {
+				totalLength += rawMessages[i]?.content?.length ?? 0;
+			}
+			if (totalLength > 16000) {
+				rawMessages.shift;
+			}
+		} while (totalLength > 16000);
+
 		const messages = rawMessages?.filter((mes: Message) => mes?.content)?.map((mes: Message) => {
 			if (mes?.author?.id == interaction.user.id) { // mes?.author?.id === process.env.BOT_APP_ID || 
 				return {
@@ -39,8 +51,6 @@ export default class WriteReplyCommand {
 			}
 		}).reverse() ?? [];
 
-		// TODO: limit the number of total tokens
-
 		messages.unshift({
 			"role": ChatCompletionRequestMessageRoleEnum.User,
 			"content": `Assume the role of ${guildMembers?.get(interaction?.user?.id)?.displayName ?? interaction?.user?.username}, a human member of the TTRPG Community Crit Fumble Gaming's (CFG) Discord Server. ${prompt ?? 'Contribute to, comment on, or otherwise continue the above conversation.'}`,
@@ -49,8 +59,6 @@ export default class WriteReplyCommand {
 			"role": ChatCompletionRequestMessageRoleEnum.User,
 			"content": `${prompt ?? 'Contribute to, comment on, or otherwise continue the above conversation.'}`,
 		})
-
-		console.log(messages);
 		
 		const rawResponse: any = await openAi.createChatCompletion({
 			messages,
