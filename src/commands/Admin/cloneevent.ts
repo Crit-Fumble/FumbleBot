@@ -85,7 +85,7 @@ export default class CloneEventCommand {
 		interaction.editReply({ content: `New Event Data\n\`\`\`${JSON.stringify(newEvent, null, 2)}\`\`\``});
 
 		const createdEvent = await scheduledEvents?.create(newEvent).catch(err => {
-			interaction.editReply({ content: `Error Creating Event\n\`\`\`${JSON.stringify(err, null, 2)}\`\`\``});
+			interaction.editReply({ content: `Error Creating Event\n\`\`\`${JSON.stringify(err, null, 2)}\`\`\`\n\`\`\`${JSON.stringify(newEvent, null, 2)}\`\`\``});
 		});
 
 		if (!createdEvent) {
