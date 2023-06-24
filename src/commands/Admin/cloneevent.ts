@@ -20,9 +20,8 @@ export default class CloneEventCommand {
 	async ping(
 		@SlashOption({ name: 'url', type: ApplicationCommandOptionType.String, required: true }) url: string,
 		@SlashOption({ name: 'weeks', type: ApplicationCommandOptionType.Number, required: false }) weeks: number,
-    // @SlashChoice({ name: "Weekly", value: "weekly" }, { name: "Bi-Weekly", value: "weekly" }, { name: "Monthly", value: "monthly" }, )
-		// @SlashOption({ name: 'interval', type: ApplicationCommandOptionType.String, required: false }) interval: string,
-		// @SlashOption({ name: 'quantity', type: ApplicationCommandOptionType.Number, required: false }) quantity: number,
+		// @SlashOption({ name: 'months', type: ApplicationCommandOptionType.Number, required: false }) months: number,
+		// @SlashOption({ name: 'number', type: ApplicationCommandOptionType.Number, required: false }) number: number,
 		interaction: CommandInteraction,
 		client: Client,
 		{ localize }: InteractionData
@@ -41,6 +40,7 @@ export default class CloneEventCommand {
 		) {
 			return;
 		}
+		interaction.editReply({ content: `Found Event\n\`\`\`${JSON.stringify(event, null, 2)}\`\`\``});
 		
 		const name = `${event?.name}`;
 		let newEvent = {
@@ -67,6 +67,14 @@ export default class CloneEventCommand {
 			}
 		}
 
+		// if (months) {
+		// 	// TODO: on the xth weekday of the month, ie 3rd thursday, etc
+		// 	newEvent = {
+		// 		...newEvent,
+		// 		scheduledStartTime: newEvent?.scheduledStartTime + (weeks * 7 * 24 * 60 * 60 * 1000),
+		// 	}
+		// }
+
 		do {
 			// add one week until we get to a valid date
 			newEvent = {
@@ -75,9 +83,11 @@ export default class CloneEventCommand {
 			}
 		} while (newEvent?.scheduledStartTime <= Date.now())
 
+		// TODO: create number, iterating the time interval each time
+		interaction.editReply({ content: `New Event Data\n\`\`\`${JSON.stringify(newEvent, null, 2)}\`\`\``});
 		const createdEvent = await scheduledEvents?.create(newEvent);
 
-		interaction.editReply({ content: `Event Cloned -> [${name}](${createdEvent})`})
+		interaction.editReply({ content: `Created Event -> [${name}](${createdEvent})\n\`\`\`${JSON.stringify(createdEvent, null, 2)}\`\`\``});
 	}
 
 }
