@@ -56,10 +56,12 @@ export default class GhostWriteCommand {
 			"content": `Assume the role of ${guildMembers?.get(interaction?.user?.id)?.displayName ?? interaction?.user?.username}, a human member of the TTRPG Community Crit Fumble Gaming's (CFG) Discord Server. ${prompt ?? 'Contribute to, comment on, or otherwise continue the above conversation.'}`,
 		})
 		
-		messages.push({
-			"role": ChatCompletionRequestMessageRoleEnum.User,
-			"content": `${prompt ?? 'Contribute to, comment on, or otherwise continue the above conversation.'}`,
-		})
+		if (prompt) {
+			messages.push({
+				"role": ChatCompletionRequestMessageRoleEnum.User,
+				"content": `${prompt}`,
+			})
+		}
 		
 		const rawResponse: any = await openAi.createChatCompletion({
 			messages,

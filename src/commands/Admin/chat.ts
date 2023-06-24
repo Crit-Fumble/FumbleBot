@@ -59,11 +59,14 @@ export default class ChatCommand {
 		messages.unshift({
 			"role": ChatCompletionRequestMessageRoleEnum.User,
 			"content": `Assume the role of FumbleBot, a chat bot on the TTRPG Community Crit Fumble Gaming's (CFG) Discord Server. ${prompt ?? 'Contribute to, comment on, or otherwise continue the above conversation.'}`,
-		}),
-		messages.push({
-			"role": ChatCompletionRequestMessageRoleEnum.User,
-			"content": `${prompt ?? 'Contribute to, comment on, or otherwise continue the above conversation.'}`,
-		})
+		});
+
+		if (prompt) {
+			messages.push({
+				"role": ChatCompletionRequestMessageRoleEnum.User,
+				"content": `${prompt}`,
+			})
+		}
 		
 		const rawResponse: any = await openAi.createChatCompletion({
 			messages,
