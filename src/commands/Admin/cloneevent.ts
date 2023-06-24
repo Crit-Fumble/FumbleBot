@@ -86,10 +86,11 @@ export default class CloneEventCommand {
 
 		// TODO: create number, iterating the time interval each time
 		interaction.editReply({ content: `New Event Data\n\`\`\`${JSON.stringify(newEvent, null, 2)}\`\`\``});
+
 		const createdEvent = await scheduledEvents?.create(newEvent).catch(err => {
-			interaction.editReply({ content: `Error Creating Event\n\`\`\`${JSON.stringify(err, null, 2)}\`\`\``});
+			return interaction.editReply({ content: `Error Creating Event\n\`\`\`${JSON.stringify(err, null, 2)}\`\`\``});
 		});
 
-		interaction.editReply({ content: `Created Event -> [${name}](${createdEvent})\n\`\`\`${JSON.stringify(createdEvent, null, 2)}\`\`\``});
+		return interaction.editReply({ content: `Created Event -> [${name}](${createdEvent})\n\`\`\`${JSON.stringify(createdEvent, null, 2)}\`\`\``});
 	}
 }

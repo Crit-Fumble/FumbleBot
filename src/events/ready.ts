@@ -71,7 +71,6 @@ export default class ReadyEvent {
 
     @Schedule('0 */1 * * * *') // each 1 minute
     async minuteUpdate() {
-        console.info('One Minute Update');
         const client = await resolveDependency(Client)
         const guilds = client.guilds.cache;
 
@@ -97,11 +96,11 @@ export default class ReadyEvent {
 
     @Schedule('0 */10 * * * *') // each 10 minutes
     async tenMinuteUpdate() {
-        console.info('Ten Minute Update');
+        //
     }
 
     @Schedule('0 0 */1 * * *') // each 1 hour
     async hourUpdate() {
-        console.info('One Hour Update');
+        //
     }
 }
