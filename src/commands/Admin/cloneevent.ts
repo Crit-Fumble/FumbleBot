@@ -33,7 +33,8 @@ export default class CloneEventCommand {
 			return;
 		}
 
-		const scheduledEvents = interaction.guild?.scheduledEvents;
+		const guild = interaction.guild;
+		const scheduledEvents = guild?.scheduledEvents;
 		const event = scheduledEvents?.cache?.get(eventId);
 		if (!event?.name 
 			|| !event?.scheduledStartTimestamp
@@ -56,7 +57,7 @@ export default class CloneEventCommand {
 				location: event?.entityMetadata?.location,
 			} : undefined,
 			// TODO: figure out how to fix image
-			// image: event?.image ?? undefined 
+			image: event?.coverImageURL() ?? undefined
 		};
 
 		if (weeks) {
