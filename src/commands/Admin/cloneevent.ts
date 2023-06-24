@@ -40,6 +40,7 @@ export default class CloneEventCommand {
 		) {
 			return;
 		}
+
 		interaction.editReply({ content: `Found Event\n\`\`\`${JSON.stringify(event, null, 2)}\`\`\``});
 		
 		const name = `${event?.name}`;
@@ -85,9 +86,10 @@ export default class CloneEventCommand {
 
 		// TODO: create number, iterating the time interval each time
 		interaction.editReply({ content: `New Event Data\n\`\`\`${JSON.stringify(newEvent, null, 2)}\`\`\``});
-		const createdEvent = await scheduledEvents?.create(newEvent);
+		const createdEvent = await scheduledEvents?.create(newEvent).catch(err => {
+			interaction.editReply({ content: `Error Creating Event\n\`\`\`${JSON.stringify(err, null, 2)}\`\`\``});
+		});
 
 		interaction.editReply({ content: `Created Event -> [${name}](${createdEvent})\n\`\`\`${JSON.stringify(createdEvent, null, 2)}\`\`\``});
 	}
-
 }
