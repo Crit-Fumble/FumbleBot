@@ -57,7 +57,7 @@ export default class CloneEventCommand {
 				location: event?.entityMetadata?.location,
 			} : undefined,
 			// TODO: figure out how to fix image
-			image: event?.coverImageURL() ?? undefined
+			image: event?.coverImageURL({size: 512}) ?? undefined
 		};
 
 		if (weeks) {
