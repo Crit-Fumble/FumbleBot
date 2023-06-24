@@ -55,7 +55,8 @@ export default class CloneEventCommand {
 			entityMetadata: event?.entityMetadata?.location ? {
 				location: event?.entityMetadata?.location,
 			} : undefined,
-			image: event?.image ?? undefined
+			// TODO: figure out how to fix image
+			// image: event?.image ?? undefined 
 		};
 
 		if (weeks) {
