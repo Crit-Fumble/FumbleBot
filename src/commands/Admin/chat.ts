@@ -25,8 +25,8 @@ export default class ChatCommand {
 		}));
 
 		// const guildMembers = await interaction.guild?.members.fetch();
-		const rawMessages: any = await interaction.channel?.messages.fetch();
-		const messages = rawMessages?.map((mes: Message) => {
+		const rawMessages: any = await interaction.channel?.messages.fetch({limit: 64});
+		const messages = rawMessages?.filter((mes: Message) => mes?.content)?.map((mes: Message) => {
 			if (mes?.author?.id === process.env.BOT_APP_ID) {
 				return {
 					"role": ChatCompletionRequestMessageRoleEnum.Assistant,
@@ -39,13 +39,21 @@ export default class ChatCommand {
 					"content": `${mes?.content}`,
 				};
 			}
-		}).reverse();
+		}).reverse() ?? [];
 
+		// TODO: limit the number of total tokens
+		
 		messages.unshift({
 			"role": ChatCompletionRequestMessageRoleEnum.User,
 			"content": `Assume the role of FumbleBot, a chat bot on the TTRPG Community Crit Fumble Gaming's (CFG) Discord Server. ${prompt ?? 'Contribute to, comment on, or otherwise continue the above conversation.'}`,
+		}),
+		messages.push({
+			"role": ChatCompletionRequestMessageRoleEnum.User,
+			"content": `${prompt ?? 'Contribute to, comment on, or otherwise continue the above conversation.'}`,
 		})
 
+		console.log(messages);
+		
 		const rawResponse: any = await openAi.createChatCompletion({
 			messages,
 			model: 'gpt-3.5-turbo',
@@ -57,12 +65,10 @@ export default class ChatCommand {
 
 		interaction.channel?.send({
 			content: response,
-			embeds: [{
-				"fields": prompt ? [{
-					"name": `Prompt`,
-					"value": `> ${prompt}`
-				}] : undefined,
-			}]
+			embeds: prompt ? [{
+				"title": `Prompt`,
+				"description": `> ${prompt}`,
+			}] : undefined,
 		})
 	}
 }

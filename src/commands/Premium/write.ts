@@ -4,7 +4,7 @@ import { Discord, Slash, SlashOption } from "@decorators"
 import { ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from "openai"
 
 @Discord()
-@Category('General')
+@Category('Premium')
 export default class WriteCommand {
 	@Slash({ 
 		name: 'write',

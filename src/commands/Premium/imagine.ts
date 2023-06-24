@@ -5,7 +5,7 @@ import { UserPermissions } from "@guards"
 import { Configuration, OpenAIApi } from "openai"
 
 @Discord()
-@Category('Admin')
+@Category('Premium')
 export default class ImagineCommand {
 
 	private readonly _categories: Map<string, CommandCategory[]> = new Map()
@@ -18,9 +18,6 @@ export default class ImagineCommand {
 		name: 'imagine',
 		description: 'imagines an image in response to a prompt',
 	})
-	@Guard(
-		UserPermissions(['Administrator'])
-	)
 	async imagine(
 		@SlashOption({ name: 'prompt', type: ApplicationCommandOptionType.String, required: true }) prompt: string,
 		interaction: CommandInteraction, 
