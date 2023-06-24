@@ -6,12 +6,12 @@ import { ChatCompletionRequestMessageRoleEnum, Configuration, OpenAIApi } from "
 
 @Discord()
 @Category('Premium')
-export default class WriteReplyCommand {
+export default class GhostWriteCommand {
 	@Slash({ 
-		name: 'writereply',
-		description: 'drafts your next message for you',
+		name: 'ghostwrite',
+		description: 'drafts your next message for you, and sends you the draft privately',
 	})
-	async writereply(
+	async ghostwrite(
 		@SlashOption({ name: 'prompt', type: ApplicationCommandOptionType.String, required: false }) prompt: string,
 		interaction: CommandInteraction, 
 	) {
@@ -55,6 +55,7 @@ export default class WriteReplyCommand {
 			"role": ChatCompletionRequestMessageRoleEnum.User,
 			"content": `Assume the role of ${guildMembers?.get(interaction?.user?.id)?.displayName ?? interaction?.user?.username}, a human member of the TTRPG Community Crit Fumble Gaming's (CFG) Discord Server. ${prompt ?? 'Contribute to, comment on, or otherwise continue the above conversation.'}`,
 		})
+		
 		messages.push({
 			"role": ChatCompletionRequestMessageRoleEnum.User,
 			"content": `${prompt ?? 'Contribute to, comment on, or otherwise continue the above conversation.'}`,
@@ -67,8 +68,6 @@ export default class WriteReplyCommand {
 			max_tokens: 500,
 		});
 		const response = rawResponse?.data?.choices?.[0]?.message?.content;
-
-		console.info(response);
 
 		interaction.followUp({
 			embeds: [{

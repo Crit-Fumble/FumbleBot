@@ -34,6 +34,7 @@ export default class WriteCommand {
 			user: interaction?.user?.id,
 			max_tokens: 500,
 		});
+		
 		const response = rawResponse?.data?.choices?.[0]?.message?.content;
 
 		interaction.followUp({

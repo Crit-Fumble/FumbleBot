@@ -6,7 +6,7 @@ import { Configuration, OpenAIApi } from "openai"
 
 @Discord()
 @Category('Premium')
-export default class ImagineCommand {
+export default class ImaginestCommand {
 
 	private readonly _categories: Map<string, CommandCategory[]> = new Map()
 
@@ -15,10 +15,10 @@ export default class ImagineCommand {
 	}
 
 	@Slash({ 
-		name: 'imagine',
-		description: 'imagines a 256x256 image in response to a prompt',
+		name: 'imaginest',
+		description: 'imagines a 1024x1024 image in response to a prompt',
 	})
-	async imagine(
+	async imaginest(
 		@SlashOption({ name: 'prompt', type: ApplicationCommandOptionType.String, required: true }) prompt: string,
 		interaction: CommandInteraction, 
 	) {
@@ -33,7 +33,7 @@ export default class ImagineCommand {
 		const rawResponse: any = await openAi.createImage({
 			prompt,
 			n: 1,
-			size: '256x256', // TODO: role-based size?
+			size: '1024x1024', // TODO: role-based size?
 			response_format: 'url',
 			user: interaction?.user?.id
 		});

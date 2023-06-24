@@ -64,8 +64,6 @@ export default class ChatCommand {
 			"role": ChatCompletionRequestMessageRoleEnum.User,
 			"content": `${prompt ?? 'Contribute to, comment on, or otherwise continue the above conversation.'}`,
 		})
-
-		console.log(messages);
 		
 		const rawResponse: any = await openAi.createChatCompletion({
 			messages,
