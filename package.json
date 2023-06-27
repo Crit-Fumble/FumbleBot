@@ -52,6 +52,7 @@
     "body-parser": "^1.20.2",
     "boxen": "~5.1.2",
     "case": "~1.6.3",
+    "catpixjs": "^1.0.2",
     "chalk": "~4.1.2",
     "cron": "~2.3.0",
     "cron-validator": "~1.3.1",

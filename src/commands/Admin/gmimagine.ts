@@ -23,6 +23,7 @@ export default class GmImagineCommand {
 	)
 	async imagine(
 		@SlashOption({ name: 'prompt', type: ApplicationCommandOptionType.String, required: true }) prompt: string,
+		@SlashOption({ name: 'data', type: ApplicationCommandOptionType.Attachment , required: false }) file: any,
 		interaction: CommandInteraction, 
 	) {
 		await interaction.deferReply({ephemeral: true});
