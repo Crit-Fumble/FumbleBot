@@ -32,7 +32,7 @@ export default class WriteCommand {
 			}],
 			model: 'gpt-3.5-turbo',
 			user: interaction?.user?.id,
-			max_tokens: 500,
+			max_tokens: 200,
 		});
 		
 		const response = rawResponse?.data?.choices?.[0]?.message?.content;
