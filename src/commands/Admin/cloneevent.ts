@@ -21,9 +21,9 @@ export default class CloneEventCommand {
 		@SlashOption({ name: 'url', type: ApplicationCommandOptionType.String, required: true }) url: string,
 		@SlashOption({ name: 'weeks', type: ApplicationCommandOptionType.Number, required: false }) weeks: number,
 		
-		@SlashOption({ name: 'interval', type: ApplicationCommandOptionType.Number, required: false }) interval: string,
-		@SlashOption({ name: 'date', type: ApplicationCommandOptionType.Number, required: false }) date: string,
-		@SlashOption({ name: 'series', type: ApplicationCommandOptionType.Number, required: false }) series: number,
+		// @SlashOption({ name: 'interval', type: ApplicationCommandOptionType.Number, required: false }) interval: string,
+		// @SlashOption({ name: 'date', type: ApplicationCommandOptionType.Number, required: false }) date: string,
+		// @SlashOption({ name: 'series', type: ApplicationCommandOptionType.Number, required: false }) series: number,
 		// @SlashOption({ name: 'months', type: ApplicationCommandOptionType.Number, required: false }) months: number,
 		// @SlashOption({ name: 'number', type: ApplicationCommandOptionType.Number, required: false }) number: number,
 		interaction: CommandInteraction,
