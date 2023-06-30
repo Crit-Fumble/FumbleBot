@@ -6,15 +6,12 @@ import { UserPermissions } from "@guards";
 // import * as GptCoder from 'gpt-3-encoder';
 
 @Discord()
-@Category('Admin')
+@Category('Premium')
 export default class ChatCommand {
 	@Slash({ 
 		name: 'chat',
 		description: 'prompts the bot to say something',
 	})
-	@Guard(
-		UserPermissions(['Administrator'])
-	)
 	async chat(
 		@SlashOption({ name: 'prompt', type: ApplicationCommandOptionType.String, required: false }) prompt: string,
 		interaction: CommandInteraction, 
