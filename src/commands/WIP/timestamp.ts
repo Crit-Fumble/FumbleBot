@@ -16,8 +16,7 @@ export default class timestamp {
 	) {
 		await interaction.deferReply({ephemeral: true});
 		const now = Math.floor(Date.now() / 1000);
-		console.log(now)
-		let parseDate = (dateString ? (Date.parse(dateString)) : now) ;
+		let parseDate = (dateString ? (Date.parse(dateString).valueOf() / 1000) : now);
 		console.log(parseDate)
 		if (Number.isNaN(parseDate)) {
 			return interaction.editReply({
