@@ -14,19 +14,22 @@ export default class timestamp {
 		// @SlashOption({ name: 'zone', type: ApplicationCommandOptionType.String, required: false }) timezoneString: string,
 		interaction: CommandInteraction, 
 	) {
-		const now = new Date()
-		console.log(now.getUTCDate())
-		let parseDate = (dateString ? ((new Date(dateString))?.getUTCDate()) : now.getUTCDate()) ;
+		await interaction.deferReply({ephemeral: true});
+		const now = Math.floor(Date.now() / 1000);
+		console.log(now)
+		let parseDate = (dateString ? (Date.parse(dateString)) : now) ;
 		console.log(parseDate)
 		if (Number.isNaN(parseDate)) {
-			parseDate = (((new Date(`${now.getFullYear} ${now.getFullYear} ${dateString}`))?.getUTCDate()) ) 
-			if (Number.isNaN(parseDate)) {
-				return `\`&{dateString}\` is not a valid date/time`
-			}
+			return interaction.editReply({
+				content: `\`${dateString}\` is not a valid date/time. See [Date.parse() JavaScript Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse)`,
+			})
+			// parseDate = (((new Date(`${now.getFullYear} ${now.getFullYear} ${dateString}`))) ) 
+			// if (Number.isNaN(parseDate)) {
+			// return `\`${dateString}\` is not a valid date/time`
+			// }
 		}
 		// console.log(parseDate)
-		await interaction.deferReply({ephemeral: true});
-		const tsTag = `<t:${parseDate}}>`;
+		const tsTag = `<t:${parseDate}>`;
 		interaction.editReply({
 			content: `${dateString ?? 'Today'} -> \`${tsTag}\` -> ${tsTag}`,
 		})
