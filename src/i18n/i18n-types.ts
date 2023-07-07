@@ -158,34 +158,6 @@ type RootTranslation = {
 				CATEGORY_DESCRIPTION: RequiredParams<'category'>
 			}
 		}
-		PLAY_DND5E: {
-			/**
-			 * P​l​a​y​ ​D​&​D​ ​5​e​ ​w​i​t​h​ ​C​h​a​t​ ​G​P​T​ ​3​.​5
-			 */
-			DESCRIPTION: string
-			EMBED: {
-				/**
-				 * P​l​a​y​ ​D​&​D​5​e
-				 */
-				TITLE: string
-				/**
-				 * {​c​a​t​e​g​o​r​y​}​ ​C​o​m​m​a​n​d​s
-				 * @param {string} category
-				 */
-				CATEGORY_TITLE: RequiredParams<'category'>
-			}
-			SELECT_MENU: {
-				/**
-				 * S​e​l​e​c​t​ ​a​ ​c​a​t​e​g​o​r​y
-				 */
-				TITLE: string
-				/**
-				 * {​c​a​t​e​g​o​r​y​}​ ​c​o​m​m​a​n​d​s
-				 * @param {string} category
-				 */
-				CATEGORY_DESCRIPTION: RequiredParams<'category'>
-			}
-		}
 		PING: {
 			/**
 			 * P​o​n​g​!
@@ -322,32 +294,6 @@ export type TranslationFunctions = {
 			EMBED: {
 				/**
 				 * Help panel
-				 */
-				TITLE: () => LocalizedString
-				/**
-				 * {category} Commands
-				 */
-				CATEGORY_TITLE: (arg: { category: string }) => LocalizedString
-			}
-			SELECT_MENU: {
-				/**
-				 * Select a category
-				 */
-				TITLE: () => LocalizedString
-				/**
-				 * {category} commands
-				 */
-				CATEGORY_DESCRIPTION: (arg: { category: string }) => LocalizedString
-			}
-		}
-		PLAY_DND5E: {
-			/**
-			 * Play D&D 5e with Chat GPT 3.5
-			 */
-			DESCRIPTION: () => LocalizedString
-			EMBED: {
-				/**
-				 * Play D&D5e
 				 */
 				TITLE: () => LocalizedString
 				/**
