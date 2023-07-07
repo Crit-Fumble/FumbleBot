@@ -61,6 +61,17 @@ const en = {
 				CATEGORY_DESCRIPTION: '{category:string} commands',
 			},
 		},
+		PLAY_DND5E: {
+			DESCRIPTION: 'Play D&D 5e with Chat GPT 3.5',
+			EMBED: {
+				TITLE: 'Play D&D5e',
+				CATEGORY_TITLE: '{category:string} Commands',
+			},
+			SELECT_MENU: {
+				TITLE: 'Select a category',
+				CATEGORY_DESCRIPTION: '{category:string} commands',
+			},
+		},
 		PING: {
 			DESCRIPTION: 'Pong!',
 			MESSAGE: '{member:string} Pong! The message round-trip took {time:number}ms.{heartbeat:string}',
