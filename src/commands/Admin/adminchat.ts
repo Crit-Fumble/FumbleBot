@@ -28,7 +28,7 @@ export default class AdminChatCommand {
 		UserPermissions(['Administrator'])
 	)
 	@Category('Admin')
-	@SlashGroup("chat")
+	@SlashGroup("adminchat")
 	async start(
 		@SlashOption({ name: 'prompt', type: ApplicationCommandOptionType.String, required: false }) prompt: string,
 		interaction: CommandInteraction, 
@@ -75,7 +75,7 @@ export default class AdminChatCommand {
 		UserPermissions(['Administrator'])
 	)
 	@Category('Admin')
-	@SlashGroup("chat")
+	@SlashGroup("adminchat")
 	async stop(
 		interaction: CommandInteraction, 
 	) {
