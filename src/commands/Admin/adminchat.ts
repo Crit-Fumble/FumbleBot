@@ -68,6 +68,33 @@ export default class AdminChatCommand {
 	}
 
 	@Slash({ 
+		name: 'check',
+		description: 'Replies with current channel'
+	})
+	@Guard(
+		UserPermissions(['Administrator'])
+	)
+	@Category('Admin')
+	@SlashGroup("adminchat")
+	async check(
+		interaction: CommandInteraction, 
+	) {
+		await interaction.deferReply({ephemeral: true});
+		if (interaction.channel?.isThread()) {
+			return await interaction.editReply({
+				content: `FumbleBot Chat cannot run in a thread (yet)...`,
+			})
+		}
+
+		const channelRepo = this.db.get(Channel);
+		const channelData = await channelRepo.findOne({channelId: interaction.channelId});
+
+		await interaction.editReply({
+			content: `FumbleBot Chat Channel Data -> ${JSON.stringify(channelData, null, 2)}`,
+		})
+	}
+
+	@Slash({ 
 		name: 'stop',
 		description: 'stops FumbleBot Chat in this channel.'
 	})
