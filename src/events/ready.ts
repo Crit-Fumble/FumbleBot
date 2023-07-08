@@ -6,7 +6,7 @@ import { generalConfig, logsConfig } from "@configs"
 import { Discord, Once, Schedule } from "@decorators"
 import { Data } from "@entities"
 import { Database, Logger, Scheduler, Store } from "@services"
-import { resolveDependency, syncAllGuilds, isToday } from "@utils/functions"
+import { resolveDependency, syncAllGuilds } from "@utils/functions"
 
 
 @Discord()
@@ -67,40 +67,5 @@ export default class ReadyEvent {
         })
         this.activityIndex++
         if (this.activityIndex === generalConfig.activities.length) this.activityIndex = 0
-    }
-
-    @Schedule('0 */1 * * * *') // each 1 minute
-    async minuteUpdate() {
-        const client = await resolveDependency(Client)
-        const guilds = client.guilds.cache;
-
-        // for each guild
-        await Promise.all(guilds.map(guild => {
-            // start scheduled events
-            const scheduledEvents = guild?.scheduledEvents;
-            const eventCache = scheduledEvents.cache;
-            const ONE_MINUTE = (1 * 60 * 1000);
-            eventCache?.each(ev => {
-                if ( ev.creatorId !== process.env.BOT_APP_ID
-                || ev.status !== GuildScheduledEventStatus.Scheduled
-                || !ev?.scheduledStartTimestamp 
-                || !isToday(new Date(ev?.scheduledStartTimestamp))
-                || ev?.scheduledStartTimestamp > (Date.now() + ONE_MINUTE)
-                ) {
-                    return;
-                }
-                ev?.setStatus(GuildScheduledEventStatus.Active);
-            });
-        }))
-    }
-
-    @Schedule('0 */10 * * * *') // each 10 minutes
-    async tenMinuteUpdate() {
-        //
-    }
-
-    @Schedule('0 0 */1 * * *') // each 1 hour
-    async hourUpdate() {
-        //
     }
 }

@@ -20,6 +20,7 @@ export default class PingCommand {
 		client: Client,
 		{ localize }: InteractionData
 	) {
+		await interaction.deferReply({ephemeral: true});
 		
 		const msg = (await interaction.followUp({ content: "Pinging...", fetchReply: true })) as Message
 

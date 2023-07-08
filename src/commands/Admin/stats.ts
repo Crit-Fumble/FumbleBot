@@ -64,6 +64,7 @@ export default class StatsCommand {
 		client: Client,
 		{ localize }: InteractionData
 	) {
+		await interaction.deferReply({ephemeral: true});
 
 		const embeds: EmbedBuilder[] = []
 

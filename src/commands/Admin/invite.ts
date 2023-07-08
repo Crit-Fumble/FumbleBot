@@ -22,6 +22,7 @@ export default class InviteCommand {
 		client: Client,
 		{ localize }: InteractionData
 	) {
+		await interaction.deferReply({ephemeral: true});
 
 		const embed = new EmbedBuilder()
 			.setTitle(localize.COMMANDS.INVITE.EMBED.TITLE())

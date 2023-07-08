@@ -2,12 +2,23 @@ import { ArgsOf, Client } from "discordx"
 
 import { Discord, Guard, On } from "@decorators"
 import { Maintenance } from "@guards"
-import { executeEvalFromMessage, isDev } from "@utils/functions"
+import { executeEvalFromMessage, isDev, resolveDependencies, resolveDependency } from "@utils/functions"
 
 import { generalConfig } from "@configs"
+import { Database, FumbleBot } from "@services"
+import { Channel, ChannelRepository } from "@entities"
 
 @Discord()
 export default class MessageCreateEvent {
+    private db: Database
+    private channelRepo: ChannelRepository
+
+	constructor() {
+        resolveDependencies([Database]).then(([db]) => {
+            this.db = db
+            this.channelRepo = this.db.get(Channel);
+        })
+    }
 
     @On("messageCreate")
     @Guard(
@@ -30,6 +41,20 @@ export default class MessageCreateEvent {
         }
 
         await client.executeCommand(message, false)
-    }
 
+		const channelData = await this.channelRepo.findOne({channelId: message.channelId});
+        if (channelData?.botChat) {
+            switch(channelData?.mode) {
+                case 'chat' :
+                    const fb = await resolveDependency(FumbleBot);
+                    await fb.chat({
+                        message,
+                        channelData
+                    })
+                    break;
+                default:
+            }
+        }
+
+    }
 }

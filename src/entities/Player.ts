@@ -1,4 +1,4 @@
-import { Entity, EntityRepositoryType, PrimaryKey, Property } from "@mikro-orm/core"
+import { Entity, EntityRepositoryType, OptionalProps, PrimaryKey, Property } from "@mikro-orm/core"
 import { EntityRepository } from "@mikro-orm/sqlite"
 
 import { CustomBaseEntity } from '@entities'
@@ -13,16 +13,13 @@ export class Player extends CustomBaseEntity {
     [EntityRepositoryType]?: PlayerRepository
 
     @PrimaryKey({ autoincrement: false })
-    id!: string
+    userId?: string // For identification
 
     @Property()
     lastInteract: Date = new Date()
 
-    @Property()
-    userId?: string // For identification
-
-    @Property()
-    data?: string // TODO: Postgres for jsonb fields
+    @Property({ type: 'json', nullable: true })
+    data?: any
 }
 
 // ===========================================
@@ -33,10 +30,10 @@ export class PlayerRepository extends EntityRepository<Player> {
 
     async updateLastInteract(userId?: string): Promise<void> {
 
-        const user = await this.findOne({ id: userId })
+        const player = await this.findOne({ userId })
 
-        if (user) {
-            user.lastInteract = new Date()
+        if (player) {
+            player.lastInteract = new Date()
             await this.flush()
         }
     }

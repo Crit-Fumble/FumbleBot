@@ -1,10 +1,25 @@
 import { Context, Controller, Get, PlatformContext } from "@tsed/common"
 import { BaseController } from "@utils/classes"
 import DiscordOAuth2 from 'discord-oauth2'
+import { Database } from "@services";
+import { Client } from "discordx";
+import { resolveDependencies } from "@utils/functions";
 
 @Controller('/sso')
 export class SsoController extends BaseController {
+    private client: Client
+    private db: Database
 
+	constructor() {
+        super();
+        
+        resolveDependencies([Client, Database]).then(([client, db]) => {
+            this.client = client
+            this.db = db
+        })
+    }
+
+    
     @Get('/discord')
     async callback(@Context() ctx: Context) {
         // if request is from a known source, allow that origin
