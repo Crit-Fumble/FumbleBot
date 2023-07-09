@@ -1,7 +1,6 @@
 import { Category } from "@discordx/utilities"
-import { ApplicationCommandOptionType, CommandInteraction, Message } from "discord.js"
+import { ApplicationCommandOptionType, CommandInteraction } from "discord.js"
 import { Client } from "discordx"
-
 import { Discord, Slash, SlashChoice, SlashOption } from "@decorators"
 import { Guard, UserPermissions } from "@guards"
 
@@ -18,6 +17,7 @@ export default class CloneEventCommand {
 		UserPermissions(['Administrator'])
 	)
 	async ping(
+		@SlashChoice()
 		@SlashOption({ name: 'url', type: ApplicationCommandOptionType.String, required: true }) url: string,
 		@SlashOption({ name: 'weeks', type: ApplicationCommandOptionType.Number, required: false }) weeks: number,
 		

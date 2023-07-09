@@ -15,16 +15,7 @@ async function wait(ms: number) {
 
 @singleton()
 export class FumbleBot {
-    private db: Database
-    private channelRepo: ChannelRepository
     private activeChannels: Map<string, Promise<any> | null> = new Map();
-
-	constructor() {
-        resolveDependencies([Database]).then(([db]) => {
-            this.db = db
-            this.channelRepo = this.db.get(Channel);
-        })
-    }
 
     public async chat({
         message, channelData
@@ -86,7 +77,7 @@ export class FumbleBot {
 			const rawResponsePromise: any = openAi.createChatCompletion({
 				messages,
 				model: 'gpt-3.5-turbo',
-				max_tokens: 200,
+				max_tokens: 300,
 			});
             this.activeChannels.set(channel?.id, rawResponsePromise);
             const rawResponse = await rawResponsePromise;
@@ -128,28 +119,4 @@ export class FumbleBot {
             });
         }))
     }
-
-    // // every hour
-    // @Schedule('0 * * * *')
-    // private async hour(): Promise<void> {
-        
-    // }
-    
-    // // every minute
-    // @Schedule('0 0 * * *')
-    // private async day(): Promise<void> {
-        
-    // }
-
-    // // every week
-    // @Schedule('0 0 0 * 0')
-    // private async week(): Promise<void> {
-        
-    // }
-    
-    // // every month
-    // @Schedule('0 0 0 * *')
-    // private async month(): Promise<void> {
-        
-    // }
 }

@@ -42,7 +42,6 @@ export default class AdminChatCommand {
 
 		const channelRepo = this.db.get(Channel);
 		const channelData = await channelRepo.findOne({channelId: interaction.channelId});
-		console.log(channelData)
 		if (!channelData) {
 			await channelRepo.create({ 
 				channelId: interaction.channelId,
@@ -59,9 +58,7 @@ export default class AdminChatCommand {
 				prompt,
 			});
 		}
-		
 		channelRepo.flush()
-
 		await interaction.editReply({
 			content: `FumbleBot Chat Started`,
 		})
@@ -69,7 +66,7 @@ export default class AdminChatCommand {
 
 	@Slash({ 
 		name: 'check',
-		description: 'Replies with current channel'
+		description: 'Replies with current channel setup data'
 	})
 	@Guard(
 		UserPermissions(['Administrator'])
@@ -85,10 +82,8 @@ export default class AdminChatCommand {
 				content: `FumbleBot Chat cannot run in a thread (yet)...`,
 			})
 		}
-
 		const channelRepo = this.db.get(Channel);
 		const channelData = await channelRepo.findOne({channelId: interaction.channelId});
-
 		await interaction.editReply({
 			content: `FumbleBot Chat Channel Data -> ${JSON.stringify(channelData, null, 2)}`,
 		})
@@ -112,10 +107,8 @@ export default class AdminChatCommand {
 				content: `FumbleBot Chat cannot run in a thread (yet)...`,
 			})
 		}
-
 		const channelRepo = this.db.get(Channel);
 		const channelData = await channelRepo.findOne({channelId: interaction.channelId});
-		console.log(channelData)
 		if (!channelData) {
 			await channelRepo.create({ 
 				channelId: interaction.channelId,
@@ -129,6 +122,7 @@ export default class AdminChatCommand {
 				botChat: false,
 			});
 		}
+		channelRepo.flush()
 
 		await interaction.editReply({
 			content: `FumbleBot Chat Ended`,

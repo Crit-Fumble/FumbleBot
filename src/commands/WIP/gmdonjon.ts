@@ -1,7 +1,7 @@
 import { Category } from "@discordx/utilities"
 import { ActionRowBuilder, ApplicationCommandOptionType, Attachment, ButtonBuilder, ButtonStyle, CommandInteraction } from "discord.js"
 import { Client } from "discordx"
-import { Discord, Slash, SlashChoice, SlashOption } from "@decorators"
+import { Discord, Slash, SlashOption } from "@decorators"
 import { Guard, UserPermissions } from "@guards"
 import axios from "axios"
 
