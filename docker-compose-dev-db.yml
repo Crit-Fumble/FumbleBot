@@ -7,22 +7,22 @@ services:
 
   # ==== Application ====
 
-  app:
-    container_name: fumblebot
-    build:
-      context: ./
-      dockerfile: ./.docker/app/Dockerfile
-    env_file:
-      - .env
-    ports:
-      - 4000:4000
-    volumes:
-        - ./database:/app/database
-        - ./logs/:/app/logs
-        - ./assets:/app/assets
-    restart: always
-    networks:
-      - dev
+  # app:
+  #   container_name: fumblebot
+  #   build:
+  #     context: ./
+  #     dockerfile: ./.docker/app/Dockerfile
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - 4000:4000
+  #   volumes:
+  #       - ./database:/app/database
+  #       - ./logs/:/app/logs
+  #       - ./assets:/app/assets
+  #   restart: always
+  #   networks:
+  #     - dev
     # depends_on:
     #   - database
 
@@ -46,20 +46,20 @@ services:
 
   # ==== PostgreSQL database ====
 
-  # database:
-  #   image: postgres
-  #   container_name: database
-  #   restart: always
-  #   volumes:
-  #     - ./data:/var/lib/postgresql:rw
-  #   environment:
-  #     - POSTGRES_DB=${DATABASE_NAME}
-  #     - POSTGRES_USER=${DATABASE_USER}
-  #     - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-  #   ports:
-  #     - 5432:5432
-  #   networks:
-  #     - dev
+  database:
+    image: postgres
+    container_name: fumblebotdb
+    restart: always
+    volumes:
+      - ./data:/var/lib/postgresql:rw
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    ports:
+      - ${DATABASE_PORT}:5432
+    networks:
+      - dev
 
   # ==== phpMyAdmin ====
 

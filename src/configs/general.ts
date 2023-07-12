@@ -11,9 +11,9 @@ export const generalConfig: GeneralConfigType = {
 
 	// useful links
 	links: {
-		invite: 'https://www.change_invite_link_here.com',
-		supportServer: 'https://discord.com/your_invitation_link',
-		gitRemoteRepo: 'https://github.com/barthofu/tscord',
+		invite: 'https://www.crit-fumble.com',
+		supportServer: 'https://discord.com/invite/dZzsst6TdG',
+		gitRemoteRepo: 'https://github.com/Crit-Fumble/FumbleBot',
 	},
 	
 	automaticUploadImagesToImgur: false, // enable or not the automatic assets upload
@@ -28,7 +28,7 @@ export const generalConfig: GeneralConfigType = {
 	// define the bot activities (phrases under its name). Types can be: PLAYING, LISTENING, WATCHING, STREAMING
     activities: [
 		{
-			text: 'TTRPGs',
+			text: 'Games with Friends',
 			type: 'PLAYING'
 		},
 		// {
@@ -41,6 +41,5 @@ export const generalConfig: GeneralConfigType = {
 
 // global colors
 export const colorsConfig = {
-
-	primary: '#2F3136'
+	primary: '#9900ff'
 }
