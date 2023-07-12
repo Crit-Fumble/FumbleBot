@@ -4,6 +4,24 @@ import { Client } from "discordx"
 import { Discord, Slash, SlashChoice, SlashOption } from "@decorators"
 import { Guard, UserPermissions } from "@guards"
 
+// TODO: Make this happen down there, but with server events in a dropdown
+// @SelectMenuComponent({
+// 	id: 'help-category-selector'
+// })
+// async selectCategory(interaction: StringSelectMenuInteraction, client: Client, { localize }: InteractionData) {
+
+// 	const category = interaction.values[0]
+
+// 	const embed = await this.getEmbed({ client, interaction, category, locale: localize })
+// 	let components: any[] = []
+// 	components.push(this.getSelectDropdown(category, localize).toJSON())
+
+// 	interaction.update({
+// 		embeds: [embed],
+// 		components
+// 	})
+// }
+
 
 @Discord()
 @Category('Admin')

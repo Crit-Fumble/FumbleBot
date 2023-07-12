@@ -20,6 +20,8 @@ export default class MaintenanceCommand {
 		client: Client,
 		{ localize }: InteractionData
 	) {
+
+		await interaction.deferReply({ephemeral: true});
 				
 		await setMaintenance(state)
 
