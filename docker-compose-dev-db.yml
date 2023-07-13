@@ -46,9 +46,9 @@ services:
 
   # ==== PostgreSQL database ====
 
-  database:
+  critfumbledb:
     image: postgres
-    container_name: fumblebotdb
+    container_name: critfumbledb
     restart: always
     volumes:
       - ./data:/var/lib/postgresql:rw

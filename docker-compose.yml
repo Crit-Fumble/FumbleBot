@@ -22,44 +22,44 @@ services:
         - ./assets:/app/assets
     restart: always
     networks:
-      - dev
-    # depends_on:
-    #   - database
+      - critfumble
+    depends_on:
+      - critfumbledb
 
   # ==== MySQL database ====
 
   # database:
-    image: mysql # or `mariadb`
-    container_name: database
-    restart: always
-    volumes:
-      - ./data:/var/lib/mysql:rw
-    environment:
-      - MYSQL_DATABASE=${DATABASE_NAME}
-      - MYSQL_USER=${DATABASE_USER}
-      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
-    ports:
-      - ${DATABASE_PORT}:5432
-    networks:
-      - dev
+    # image: mysql # or `mariadb`
+    # container_name: database
+    # restart: always
+    # volumes:
+    #   - ./data:/var/lib/mysql:rw
+    # environment:
+    #   - MYSQL_DATABASE=${DATABASE_NAME}
+    #   - MYSQL_USER=${DATABASE_USER}
+    #   - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+    #   - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
+    # ports:
+    #   - ${DATABASE_PORT}:5432
+    # networks:
+    #   - critfumble
 
   # ==== PostgreSQL database ====
 
-  # database:
-  #   image: postgres
-  #   container_name: database
-  #   restart: always
-  #   volumes:
-  #     - ./data:/var/lib/postgresql:rw
-  #   environment:
-  #     - POSTGRES_DB=${DATABASE_NAME}
-  #     - POSTGRES_USER=${DATABASE_USER}
-  #     - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-  #   ports:
-  #     - 5432:5432
-  #   networks:
-  #     - dev
+  critfumbledb:
+    image: postgres
+    container_name: critfumbledb
+    restart: always
+    volumes:
+      - ./data:/var/lib/postgresql:rw
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    ports:
+      - ${DATABASE_PORT}:5432
+    networks:
+      - critfumble
 
   # ==== phpMyAdmin ====
 
@@ -74,4 +74,4 @@ services:
   #   environment:
   #       PMA_HOST: database
   #   networks:
-  #       - dev
+  #       - critfumble
