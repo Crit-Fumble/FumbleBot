@@ -21,8 +21,8 @@ const envMikroORMConfig = {
         /**
          * SQLite
          */
-        // type: 'better-sqlite', // or 'sqlite'
-        // dbName: `${databaseConfig.path}db.sqlite`,
+        type: 'better-sqlite', // or 'sqlite'
+        dbName: `${databaseConfig.path}db.sqlite`,
 
         /**
          * MongoDB
@@ -33,13 +33,13 @@ const envMikroORMConfig = {
         /**
          * PostgreSQL
          */
-        type: 'postgresql',
-        // clientUrl: process.env['DATABASE_CLIENTURL'],
-        dbName: process.env['DATABASE_NAME'],
-        host: process.env['DATABASE_HOST'],
-        port: Number(process.env['DATABASE_PORT']),
-        user: process.env['DATABASE_USER'],
-        password: process.env['DATABASE_PASSWORD'],
+        // type: 'postgresql',
+        // dbName: process.env['DATABASE_NAME'],
+        // host: process.env['DATABASE_HOST'],
+        // port: Number(process.env['DATABASE_PORT']),
+        // user: process.env['DATABASE_USER'],
+        // password: process.env['DATABASE_PASSWORD'],
+
         /**
          * MySQL
          */
@@ -47,7 +47,7 @@ const envMikroORMConfig = {
         // dbName: process.env['DATABASE_NAME'],
         // host: process.env['DATABASE_HOST'],
         // port: Number(process.env['DATABASE_PORT']),
-        // user: process.env['DATABASE_USER'],
+        // user: process.env['DATABASE_USER'], 
         // password: process.env['DATABASE_PASSWORD'],
 
         /**

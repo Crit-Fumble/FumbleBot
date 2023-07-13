@@ -42,8 +42,8 @@ RUN npm ci --omit=dev && npm cache clean --force
 
 # Inject cert
 # RUN echo $DATABASE_CA_CERT
-RUN echo $DATABASE_CA_CERT > /app/.postgres/root.crt
-RUN chmod 644 /app/.postgres/root.crt
+# RUN echo $DATABASE_CA_CERT > /app/.postgres/root.crt
+# RUN chmod 644 /app/.postgres/root.crt
 
 # Finaly start the bot
 CMD ["node", "build/main.js"]
