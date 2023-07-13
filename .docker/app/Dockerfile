@@ -40,8 +40,9 @@ COPY --from=build-runner /tmp/app/build /app/build
 # and install dependencies for plugins (because plugins:install script doesn't work in docker)
 RUN npm ci --omit=dev && npm cache clean --force 
 
-RUN echo $DATABASE_CA_CERT
-RUN echo $DATABASE_CA_CERT > /app/critfumbledb.crt
+# Inject cert
+# RUN echo $DATABASE_CA_CERT
+RUN echo $DATABASE_CA_CERT > /app/.postgres/root.crt
 
 # Finaly start the bot
 CMD ["node", "build/main.js"]
