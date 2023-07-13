@@ -29,7 +29,6 @@ export class Database {
         // defines entities into the config
         config.entities = [...Object.values(entities), ...pluginsManager.getEntities()]
 
-        console.log(config)
         // initialize the ORM using the configuration exported in `mikro-orm.config.ts`
         this._orm = await MikroORM.init(config)
 
