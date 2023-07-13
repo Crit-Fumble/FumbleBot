@@ -29,8 +29,6 @@ ENV NODE_ENV $NODE_ENV
 # Set work directory
 WORKDIR /app
 
-RUN echo $DATABASE_CA_CERT > ./critfumbledb.crt
-
 # Copy package.json and package-lock.json from build-runner
 COPY --from=build-runner /tmp/app/package.json /app/package.json
 COPY --from=build-runner /tmp/app/package-lock.json /app/package-lock.json
@@ -41,6 +39,9 @@ COPY --from=build-runner /tmp/app/build /app/build
 # Install dependencies from package-lock.json
 # and install dependencies for plugins (because plugins:install script doesn't work in docker)
 RUN npm ci --omit=dev && npm cache clean --force 
+
+RUN echo $DATABASE_CA_CERT
+RUN echo $DATABASE_CA_CERT > /app/critfumbledb.crt
 
 # Finaly start the bot
 CMD ["node", "build/main.js"]
