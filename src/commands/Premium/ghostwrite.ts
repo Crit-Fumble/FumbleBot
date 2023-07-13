@@ -29,12 +29,13 @@ export default class GhostWriteCommand {
 		let totalLength = 0;
 		do {
 			for (let i = 0; i < rawMessages.length; i++) {
+				console.log()
 				totalLength += rawMessages[i]?.content?.length ?? 0;
 			}
-			if (totalLength > 16000) {
+			if (totalLength > 10000) {
 				rawMessages.shift;
 			}
-		} while (totalLength > 16000);
+		} while (totalLength > 10000);
 
 		const messages = rawMessages?.filter((mes: Message) => mes?.content)?.map((mes: Message) => {
 			if (mes?.author?.id == interaction.user.id) { // mes?.author?.id === process.env.BOT_APP_ID || 
@@ -67,7 +68,7 @@ export default class GhostWriteCommand {
 			messages,
 			model: 'gpt-3.5-turbo',
 			user: interaction?.user?.id,
-			max_tokens: 400,
+			max_tokens: 200,
 		});
 		const response = rawResponse?.data?.choices?.[0]?.message?.content;
 

@@ -35,7 +35,7 @@ export class FumbleBot {
             if (pendingRequest) {
                 Promise.reject(pendingRequest);
             }
-			const rawMessagesPromise: any = channel?.messages.fetch({limit: 64});
+			const rawMessagesPromise: any = channel?.messages.fetch({limit: 32})
             this.activeChannels.set(channel?.id, rawMessagesPromise);
             const rawMessages = await rawMessagesPromise;
             await wait(TEN_SECS);
@@ -46,10 +46,10 @@ export class FumbleBot {
 				for (let i = 0; i < rawMessages.length; i++) {
 					totalLength += rawMessages[i]?.content?.length ?? 0;
 				}
-				if (totalLength > 16000) {
+				if (totalLength > 10000) {
 					rawMessages.shift;
 				}
-			} while (totalLength > 16000);
+			} while (totalLength > 10000);
 
 			const messages = rawMessages?.filter((mes: Message) => mes?.content)?.map((mes: Message) => {
 				if (mes?.author?.id === process.env.BOT_APP_ID) {
@@ -77,11 +77,14 @@ export class FumbleBot {
 			const rawResponsePromise: any = openAi.createChatCompletion({
 				messages,
 				model: 'gpt-3.5-turbo',
-				max_tokens: 300,
+				max_tokens: 250,
 			});
             this.activeChannels.set(channel?.id, rawResponsePromise);
             const rawResponse = await rawResponsePromise;
 			const response = rawResponse?.data?.choices?.[0]?.message?.content;
+            if (!response) {
+                throw "No Response from OpenAI";
+            }
             const replyPromise = channel?.send(response);
             this.activeChannels.set(channel?.id, replyPromise);
             const reply = await replyPromise;

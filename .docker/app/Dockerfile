@@ -29,6 +29,8 @@ ENV NODE_ENV $NODE_ENV
 # Set work directory
 WORKDIR /app
 
+RUN echo $DATABASE_CA_CERT > ./critfumbledb.cert
+
 # Copy package.json and package-lock.json from build-runner
 COPY --from=build-runner /tmp/app/package.json /app/package.json
 COPY --from=build-runner /tmp/app/package-lock.json /app/package-lock.json
