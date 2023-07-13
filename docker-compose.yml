@@ -23,8 +23,8 @@ services:
     restart: always
     networks:
       - critfumble
-    depends_on:
-      - critfumbledb
+    # depends_on:
+    #   - critfumbledb
 
   # ==== MySQL database ====
 
