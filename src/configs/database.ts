@@ -34,13 +34,12 @@ const envMikroORMConfig = {
          * PostgreSQL
          */
         type: 'postgresql',
+        // clientUrl: process.env['DATABASE_CLIENTURL'],
         dbName: process.env['DATABASE_NAME'],
         host: process.env['DATABASE_HOST'],
         port: Number(process.env['DATABASE_PORT']),
         user: process.env['DATABASE_USER'],
         password: process.env['DATABASE_PASSWORD'],
-        validate: true,
-        validateRequired: true,
         /**
          * MySQL
          */
