@@ -2,7 +2,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 const { Migration } = require('@mikro-orm/migrations');
 
-class Migration20230713002712 extends Migration {
+class Migration20230713023434 extends Migration {
 
   async up() {
     this.addSql('create table "channel" ("channel_id" varchar(255) not null, "created_at" timestamptz(0) not null, "updated_at" timestamptz(0) not null, "last_interact" timestamptz(0) not null, "bot_chat" boolean not null default false, "mode" varchar(255) not null default \'chat\', "prompt" varchar(255) null, "data" jsonb null, constraint "channel_pkey" primary key ("channel_id"));');
@@ -24,25 +24,5 @@ class Migration20230713002712 extends Migration {
     this.addSql('create table "user" ("id" varchar(255) not null, "created_at" timestamptz(0) not null, "updated_at" timestamptz(0) not null, "last_interact" timestamptz(0) not null, constraint "user_pkey" primary key ("id"));');
   }
 
-  async down() {
-    this.addSql('drop table if exists "channel" cascade;');
-
-    this.addSql('drop table if exists "data" cascade;');
-
-    this.addSql('drop table if exists "guild" cascade;');
-
-    this.addSql('drop table if exists "image" cascade;');
-
-    this.addSql('drop table if exists "pastebin" cascade;');
-
-    this.addSql('drop table if exists "player" cascade;');
-
-    this.addSql('drop table if exists "stat" cascade;');
-
-    this.addSql('drop table if exists "thread" cascade;');
-
-    this.addSql('drop table if exists "user" cascade;');
-  }
-
 }
-exports.Migration20230713002712 = Migration20230713002712;
+exports.Migration20230713023434 = Migration20230713023434;
