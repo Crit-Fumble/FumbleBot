@@ -46,20 +46,20 @@ services:
 
   # ==== PostgreSQL database ====
 
-  critfumbledb:
-    image: postgres
-    container_name: critfumbledb
-    restart: always
-    volumes:
-      - ./data:/var/lib/postgresql:rw
-    environment:
-      - POSTGRES_DB=${DATABASE_NAME}
-      - POSTGRES_USER=${DATABASE_USER}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-    ports:
-      - ${DATABASE_PORT}:5432
-    networks:
-      - critfumble
+  # critfumbledb:
+  #   image: postgres
+  #   container_name: critfumbledb
+  #   restart: always
+  #   volumes:
+  #     - ./data:/var/lib/postgresql:rw
+  #   environment:
+  #     - POSTGRES_DB=${DATABASE_NAME}
+  #     - POSTGRES_USER=${DATABASE_USER}
+  #     - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+  #   ports:
+  #     - ${DATABASE_PORT}:5432
+  #   networks:
+  #     - critfumble
 
   # ==== phpMyAdmin ====
 
